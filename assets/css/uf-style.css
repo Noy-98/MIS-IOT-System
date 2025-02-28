@@ -1,0 +1,80 @@
+.login-container {
+    height: 100vh;
+	align-items: center;
+	background-image: url("../img/iotc-website-banner.jpg");
+}
+a{
+	color: #ffffff;
+	text-decoration: none;
+}
+a:hover{
+	color: #388da8;
+}
+.uf-form-signin {
+    margin: auto;
+    padding-top: 300px;
+    padding-bottom: 250px;
+    padding-left: 150px;
+    padding-right: 150px;
+}
+.uf-input-group .input-group-text {
+    background: #ffffff70;
+    color: #f8f9fa;
+    border: unset;
+    font-size: 18px;
+    padding: 15px;
+    width: 50px;
+}
+
+.uf-input-group .form-control {
+    border: unset;
+    border-left: 1px solid #ffffff05;
+    font-size: 16px;
+    background: #ffffffc0;
+}
+
+.uf-input-group .form-control:focus {
+    box-shadow: unset;
+    background: #ffffff;
+}
+.uf-btn-primary {
+    background: #388da8;
+    color: #fff;
+}
+
+.uf-btn-primary:hover {
+    background: #ffffff;
+    color: #388da8;
+}
+
+.uf-form-check-input:checked {
+    background-color: #388da8;
+    border-color: #388da8;
+}
+
+.uf-social-login .uf-social-ic+.uf-social-ic{
+	margin-left: 15px;
+}
+.uf-social-ic{
+	width: 40px;
+	height: 40px;
+	background: #fff;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.uf-social-ic:hover{
+	background: #842029;
+}
+.uf-social-ic:hover i{
+	color: #fff;
+}
+
+/* Media query for width 300px or less */
+@media (max-width: 577px) {
+    .uf-form-signin,
+    .uf-form-signin * {
+        display: none;
+    }
+}

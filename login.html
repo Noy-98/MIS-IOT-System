@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Island Overseas Transport Corporation</title>
+  <title>Login</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -26,6 +26,10 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="./assets/css/all.min.css">
+  <link rel="stylesheet" href="./assets/css/uf-style.css">
 
 </head>
 
@@ -53,13 +57,35 @@
   </header>
 
   <main class="main">
-    <section id="hero" class="hero section">
-      <div class="hero-bg">
-        <img src="assets/img/iotc-website-banner.jpg" alt="">
-      </div>
-
-
-    </section>
+      <div class="uf-form-signin login-container">
+        <div class="text-center">
+        <h1 class="text-white h3">ACCOUNT LOGIN</h1>
+        </div>
+        <form class="mt-4">
+          <div class="input-group uf-input-group input-group-lg mb-3">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input type="text" class="form-control" placeholder="Username or Email address">
+          </div>
+          <div class="input-group uf-input-group input-group-lg mb-3">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="d-flex mb-3 justify-content-between">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input uf-form-check-input" id="exampleCheck1">
+              <label class="form-check-label text-white" for="exampleCheck1">Remember Me</label>
+            </div>
+            <a href="#">Forgot password?</a>
+          </div>
+          <div class="d-grid mb-4">
+            <button type="submit" class="btn uf-btn-primary btn-lg">Login</button>
+          </div>
+          <div class="mt-4 text-center">
+            <span class="text-white">Don't have an account?</span>
+            <a href="register.html">Sign Up</a>
+          </div>
+        </form>
+      </div> 
   </main>
 
   <footer id="footer" class="footer position-relative light-background">
@@ -115,6 +141,9 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script src="./assets/js/popper.min.js"></script>
+  <script src="./assets/js/bootstrap.min.js"></script>
 
 </body>
 
