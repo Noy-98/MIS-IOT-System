@@ -213,6 +213,10 @@ h6 {
   --background-color: rgba(5, 88, 120, 0.9);
 }
 
+.customize-page .header {
+  --background-color: rgba(5, 88, 120, 0.9);
+}
+
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
@@ -1959,8 +1963,8 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Starter Section Section
+# login Section
 --------------------------------------------------------------*/
-.starter-section {
-  /* Add your styles here */
+.login-section {
+  height: 100vh;
 }
