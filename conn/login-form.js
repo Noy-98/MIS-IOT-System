@@ -18,9 +18,11 @@ const rememberMeCheckbox = document.getElementById("exampleCheck1");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
-let loginAttempts = 3;
-let lockoutTime = 6 * 60 * 1000; // 6 minutes in milliseconds
-let isLocked = false;
+const maxAttempts = 3;
+const lockoutTime = 6 * 60 * 1000; // 6 minutes in milliseconds
+
+// Check lockout state on page load
+checkLockout();
 
 // Load saved credentials if "Remember Me" was checked
 document.addEventListener("DOMContentLoaded", function () {
@@ -31,53 +33,28 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Function to check login attempt lock
-function checkLockout() {
-  const lockTime = localStorage.getItem("lockTime");
-  if (lockTime) {
-    const timePassed = Date.now() - parseInt(lockTime);
-    if (timePassed < lockoutTime) {
-      const remainingTime = Math.ceil((lockoutTime - timePassed) / 1000);
-      errorMessage.innerHTML = `Too many failed attempts. Try again in ${remainingTime} seconds.`;
-      isLocked = true;
-      return true;
-    } else {
-      localStorage.removeItem("lockTime");
-      loginAttempts = 3;
-      isLocked = false;
-      return false;
-    }
-  }
-  return false;
-}
-
-// Function to display error message
-function showError(message) {
-  errorMessage.innerHTML = message;
-  errorMessage.style.display = "block";
-}
-
 // Handle form submission
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
 
-  if (checkLockout()) return;
+  if (isLockedOut()) {
+    return;
+  }
 
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
   usersRef.orderByChild("email").equalTo(email).once("value", (snapshot) => {
     if (!snapshot.exists()) {
-      loginAttempts--;
-      showError("Email does not exist.");
+      handleFailedAttempt();
     } else {
       snapshot.forEach((childSnapshot) => {
         const userData = childSnapshot.val();
         if (userData.password !== password) {
-          loginAttempts--;
-          showError("Incorrect password.");
+          handleFailedAttempt();
         } else {
-          // Store credentials if "Remember Me" is checked
+          resetAttempts();
+
           if (rememberMeCheckbox.checked) {
             localStorage.setItem("rememberMe", "true");
             localStorage.setItem("savedEmail", email);
@@ -88,18 +65,73 @@ loginForm.addEventListener("submit", function (e) {
             localStorage.removeItem("savedPassword");
           }
 
-          localStorage.removeItem("lockTime");
-          loginAttempts = 3;
-          errorMessage.style.display = "none";
           window.location.href = "index.html";
-          return;
         }
       });
     }
-
-    if (loginAttempts <= 0) {
-      localStorage.setItem("lockTime", Date.now());
-      showError("Too many failed attempts. Locked for 6 minutes.");
-    }
   });
 });
+
+function handleFailedAttempt() {
+  let attempts = parseInt(localStorage.getItem("loginAttempts")) || 0;
+  attempts++;
+
+  if (attempts >= maxAttempts) {
+    localStorage.setItem("loginLockoutTime", Date.now());
+    showError(`Too many failed attempts. Try again in 6 minutes.`);
+    checkLockout();
+  } else {
+    localStorage.setItem("loginAttempts", attempts);
+    showError(`Incorrect email or password. Attempts left: ${maxAttempts - attempts}`);
+  }
+}
+
+function resetAttempts() {
+  localStorage.removeItem("loginAttempts");
+  localStorage.removeItem("loginLockoutTime");
+}
+
+function isLockedOut() {
+  const lockoutTimeStart = localStorage.getItem("loginLockoutTime");
+  if (!lockoutTimeStart) return false;
+
+  const timeElapsed = Date.now() - parseInt(lockoutTimeStart);
+  if (timeElapsed >= lockoutTime) {
+    resetAttempts();
+    return false;
+  }
+
+  return true;
+}
+
+function checkLockout() {
+  if (isLockedOut()) {
+    let timeRemaining = lockoutTime - (Date.now() - parseInt(localStorage.getItem("loginLockoutTime")));
+    showError(`Too many failed attempts. Try again in ${formatTime(timeRemaining)}`);
+    startCountdown(timeRemaining);
+  }
+}
+
+function startCountdown(timeRemaining) {
+  const interval = setInterval(() => {
+    timeRemaining -= 1000;
+    if (timeRemaining <= 0) {
+      clearInterval(interval);
+      resetAttempts();
+      errorMessage.style.display = "none";
+    } else {
+      errorMessage.textContent = `Too many failed attempts. Try again in ${formatTime(timeRemaining)}`;
+    }
+  }, 1000);
+}
+
+function formatTime(ms) {
+  const minutes = Math.floor(ms / 60000);
+  const seconds = Math.floor((ms % 60000) / 1000);
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+}
+
+function showError(message) {
+  errorMessage.textContent = message;
+  errorMessage.style.display = "block";
+}
