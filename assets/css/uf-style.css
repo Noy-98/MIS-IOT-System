@@ -17,6 +17,15 @@ a:hover{
     padding-left: 150px;
     padding-right: 150px;
 }
+
+.uf-form-signup {
+    margin: auto;
+    padding-top: 220px;
+    padding-bottom: 250px;
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
 .uf-input-group .input-group-text {
     background: #ffffff70;
     color: #f8f9fa;
