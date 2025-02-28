@@ -36,6 +36,10 @@ signupForm.addEventListener("submit", async (e) => {
           errors.push("This email is already registered.");
       }
 
+      if (mobileNum.length !== 11 || !/^\d{11}$/.test(mobileNum)) {
+        errors.push("Invalid mobile number. It must be exactly 11 digits.");
+      }
+
       if (password.length < 16) {
           errors.push("Password must be at least 16 characters long.");
       }
