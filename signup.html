@@ -61,32 +61,37 @@
         <div class="text-center">
         <h1 class="text-white h3">ACCOUNT SIGNUP</h1>
         </div>
-        <form class="mt-4">
+        <form class="mt-4" action="" id="signupForm">
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" placeholder="Your First Name" required>
+            <input type="text" class="form-control" id="first-name" placeholder="Your First Name" required>
           </div>
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" placeholder="Your Last Name" required>
+            <input type="text" class="form-control" id="last-name" placeholder="Your Last Name" required>
           </div>
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control" placeholder="Your Email Address" required>
+            <input type="email" class="form-control" id="email" placeholder="Your Email Address" required>
           </div>
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-            <input type="text" class="form-control" placeholder="Your Mobile Phone Number" required>
+            <input type="text" class="form-control" id="mobile-number" placeholder="Your Mobile Phone Number" required>
           </div>
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" placeholder="Password" required>
+            <input type="password" class="form-control" id="password" placeholder="Password" required>
           </div>
           <div class="input-group uf-input-group input-group-lg mb-3">
             <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" placeholder="Confirm Password" required>
+            <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" required>
           </div>
           <div class="d-grid mb-4">
+            <div class="col-md-12 text-center alert">
+              <div class="loading">Loading</div>
+              <div class="error-message"></div>
+              <div class="sent-message">Signup Successfully</div>
+            </div>
             <button type="submit" class="btn uf-btn-primary btn-lg">Signup</button>
           </div>
           <div class="mt-4 text-center">
@@ -152,6 +157,9 @@
 
   <script src="./assets/js/popper.min.js"></script>
   <script src="./assets/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script src="./conn/signup-form.js"></script>
 
 </body>
 

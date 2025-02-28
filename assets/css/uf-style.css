@@ -14,6 +14,7 @@ a:hover{
     margin: auto;
     padding-top: 300px;
     padding-bottom: 250px;
+    padding-bottom: 250px;
     padding-left: 150px;
     padding-right: 150px;
 }
@@ -21,7 +22,7 @@ a:hover{
 .uf-form-signup {
     margin: auto;
     padding-top: 220px;
-    padding-bottom: 250px;
+    padding-bottom: 950px;
     padding-left: 150px;
     padding-right: 150px;
 }
@@ -79,6 +80,60 @@ a:hover{
 .uf-social-ic:hover i{
 	color: #fff;
 }
+.alert {
+  align-items: center;
+  text-align: center;
+}
+
+.alert .error-message {
+    display: none;
+    background: #df1529;
+    color: #ffffff;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  
+  .alert .sent-message {
+    display: none;
+    color: #ffffff;
+    background: #059652;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+  
+  .alert .loading {
+    display: none;
+    background: var(--surface-color);
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 24px;
+  }
+  
+  .alert .loading:before {
+    content: "";
+    display: inline-block;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin: 0 10px -6px 0;
+    border: 3px solid var(--accent-color);
+    border-top-color: var(--surface-color);
+    animation: php-email-form-loading 1s linear infinite;
+  }
+  
+  @keyframes php-email-form-loading {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
 /* Media query for width 300px or less */
 @media (max-width: 577px) {
