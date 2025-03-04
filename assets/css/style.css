@@ -1234,3 +1234,118 @@ h6 {
   background: #ffffff;
   color: #388da8;
 }
+
+
+/*--------------------------------------------------------------
+# calendars
+--------------------------------------------------------------*/
+
+.datepicker .button {
+	font: inherit;
+	cursor: pointer;
+	&:focus {
+		outline: 0;
+	}
+}
+
+
+.datepicker {
+	width: 100%;
+	background-color: #FDFDFD;
+	border-radius: 10px;
+	box-shadow: 0 0 2px 0 rgba(#000, .2), 0 5px 10px 0 rgba(#000, .1);
+	padding: 1rem;
+}
+
+.datepicker-top {
+	margin-bottom: 1rem;
+}
+
+.datepicker .btn-group {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 1rem;
+	margin-top: -.5rem;
+}
+
+.tag {
+	margin-right: .5rem;
+	margin-top: .5rem;
+	border: 0;
+	background-color: #EAEBEC;
+	border-radius: 10px;
+	padding: .5em .75em;
+	font-weight: 600;
+}
+
+.month-selector {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	background-color:#EAEBEC;
+	border-radius: 12px;
+	width: 2.5rem;
+	height: 2.5rem;
+	box-shadow: 0 0 2px 0 rgba(#000,.25), 0 0 10px 0 rgba(#000, .15);
+}
+
+.month-name {
+	font-weight: 600;
+}
+
+.datepicker-calendar {
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	grid-row-gap: 1rem;
+}
+
+.day, .date {
+	justify-self: center;
+}
+
+.day {
+	color: #999FA6;
+	font-size: .875em;
+	font-weight: 500;
+	justify-self: center;
+}
+
+.date {
+	border: 0;
+	padding: 0;
+	width: 2.25rem;
+	height: 2.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 6px;
+	font-weight: 600;
+	border: 2px solid transparent;
+	background-color: transparent;
+	cursor: pointer;
+	&:focus {
+		outline: 0;
+		color: #008FFD;
+		border: 2px solid #CBE8FF;	
+	}	
+}
+
+.faded {
+	color: #999FA6;
+}
+
+.current-day {
+	color: #FFF;
+	border-color: #008FFD;
+	background-color: #008FFD;
+	&:focus {
+		background-color: #CBE8FF;
+	}
+}
