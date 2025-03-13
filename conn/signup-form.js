@@ -21,6 +21,14 @@ signupForm.addEventListener("submit", async (e) => {
 
   const firstname = getElementVal("first-name");
   const lastname = getElementVal("last-name");
+  const bdate = getElementVal("b-date");
+  const address = getElementVal("address");
+  const higherLicensed = getElementVal("higher-licensed");
+  const position = getElementVal("select");
+  const availability = getElementVal("availability");
+  const typeOfVessel = getElementVal("type-of-vessel");
+  const experience = getElementVal("experience");
+  const resume = getElementVal("resume");
   const email = getElementVal("email");
   const mobileNum = getElementVal("mobile-number");
   const password = getElementVal("password");
@@ -31,7 +39,7 @@ signupForm.addEventListener("submit", async (e) => {
   try {
       console.log("Checking if email exists...");
       const emailExists = await checkIfEmailExists(email);
-      
+
       if (emailExists) {
           errors.push("This email is already registered.");
       }
@@ -56,13 +64,13 @@ signupForm.addEventListener("submit", async (e) => {
       }
 
       console.log("Saving user data...");
-      await saveUserData(firstname, lastname, email, mobileNum, password);
+      await saveUserData(firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password);
       console.log("User data saved successfully.");
 
       toggleLoading(false);
       showSuccess("Signup successful!");
       signupForm.reset();
-      
+
   } catch (error) {
       console.error("Error during signup:", error);
       showErrors(["Something went wrong. Please try again."]);
@@ -70,12 +78,9 @@ signupForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Function to check if email already exists (with timeout)
 const checkIfEmailExists = async (email) => {
   return new Promise((resolve, reject) => {
       const query = usersRef.orderByChild("email").equalTo(email).once("value");
-
-      // Set timeout to prevent hanging
       const timeout = setTimeout(() => {
           console.error("Firebase query timeout!");
           reject(new Error("Firebase query timeout"));
@@ -92,35 +97,38 @@ const checkIfEmailExists = async (email) => {
   });
 };
 
-// Function to save user data to Firebase
-const saveUserData = (firstname, lastname, email, mobileNum, password) => {
+const saveUserData = (firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password) => {
   return usersRef.push().set({
       firstname,
       lastname,
+      bdate,
+      address,
+      higherLicensed,
+      position,
+      availability,
+      typeOfVessel,
+      experience,
+      resume,
       email,
       mobile_number: mobileNum,
       password
   });
 };
 
-// Helper function to get form input values
 const getElementVal = (id) => document.getElementById(id).value.trim();
 
-// Function to display multiple error messages
 const showErrors = (messages) => {
   const errorMessageDiv = document.querySelector(".error-message");
-  errorMessageDiv.innerHTML = messages.map(msg => `<p>${msg}</p>`).join(""); 
+  errorMessageDiv.innerHTML = messages.map(msg => `<p>${msg}</p>`).join("");
   errorMessageDiv.style.display = "block";
 };
 
-// Function to clear error messages
 const clearErrors = () => {
   const errorMessageDiv = document.querySelector(".error-message");
   errorMessageDiv.innerHTML = "";
   errorMessageDiv.style.display = "none";
 };
 
-// Function to show success messages
 const showSuccess = (message) => {
   const successMessage = document.querySelector(".sent-message");
   successMessage.textContent = message;
@@ -128,7 +136,6 @@ const showSuccess = (message) => {
   setTimeout(() => successMessage.style.display = "none", 5000);
 };
 
-// Function to show/hide loading indicator
 const toggleLoading = (isLoading) => {
   document.querySelector(".loading").style.display = isLoading ? "block" : "none";
 };
