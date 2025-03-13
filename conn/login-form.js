@@ -43,17 +43,41 @@ loginForm.addEventListener("submit", async function (e) {
     const user = userCredential.user;
 
     if (user.emailVerified) {
-      resetAttempts();
-      if (rememberMeCheckbox.checked) {
-        localStorage.setItem("rememberMe", "true");
-        localStorage.setItem("savedEmail", email);
-        localStorage.setItem("savedPassword", password);
+      // Check user status in the database
+      const snapshot = await usersRef.orderByChild("email").equalTo(email).once("value");
+      
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        const userKey = Object.keys(userData)[0];
+        const status = userData[userKey].status;
+
+        if (status === "Pending") {
+          showError("Your application & account is processing.");
+          return;
+        } else if (status === "Decline") {
+          showError("Your application & account is declined.");
+          return;
+        } else if (status === "Approved") {
+          resetAttempts();
+          if (rememberMeCheckbox.checked) {
+            localStorage.setItem("rememberMe", "true");
+            localStorage.setItem("savedEmail", email);
+            localStorage.setItem("savedPassword", password);
+          } else {
+            localStorage.removeItem("rememberMe");
+            localStorage.removeItem("savedEmail");
+            localStorage.removeItem("savedPassword");
+          }
+          window.location.href = "../../user/home-dashboard.html";
+          return;
+        } else {
+          showError("Unknown account status. Please contact support.");
+          return;
+        }
       } else {
-        localStorage.removeItem("rememberMe");
-        localStorage.removeItem("savedEmail");
-        localStorage.removeItem("savedPassword");
+        showError("No user data found. Please contact support.");
+        return;
       }
-      window.location.href = "../../user/home-dashboard.html";
     } else {
       showError("Please verify your email before logging in.");
     }
