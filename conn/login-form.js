@@ -19,12 +19,10 @@ const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 
 const maxAttempts = 3;
-const lockoutTime = 6 * 60 * 1000; // 6 minutes in milliseconds
+const lockoutTime = 6 * 60 * 1000;
 
-// Check lockout state on page load
 checkLockout();
 
-// Load saved credentials if "Remember Me" was checked
 document.addEventListener("DOMContentLoaded", function () {
   if (localStorage.getItem("rememberMe") === "true") {
     emailInput.value = localStorage.getItem("savedEmail") || "";
@@ -33,52 +31,63 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Handle form submission
-loginForm.addEventListener("submit", function (e) {
+loginForm.addEventListener("submit", async function (e) {
   e.preventDefault();
-
-  if (isLockedOut()) {
-    return;
-  }
+  if (isLockedOut()) return;
 
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
 
-  usersRef.orderByChild("email").equalTo(email).once("value", (snapshot) => {
-    if (!snapshot.exists()) {
-      handleFailedAttempt();
+  try {
+    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const user = userCredential.user;
+
+    if (user.emailVerified) {
+      resetAttempts();
+      if (rememberMeCheckbox.checked) {
+        localStorage.setItem("rememberMe", "true");
+        localStorage.setItem("savedEmail", email);
+        localStorage.setItem("savedPassword", password);
+      } else {
+        localStorage.removeItem("rememberMe");
+        localStorage.removeItem("savedEmail");
+        localStorage.removeItem("savedPassword");
+      }
+      window.location.href = "../../user/home-dashboard.html";
     } else {
-      snapshot.forEach((childSnapshot) => {
-        const userData = childSnapshot.val();
-        if (userData.password !== password) {
-          handleFailedAttempt();
-        } else {
-          resetAttempts();
-
-          if (rememberMeCheckbox.checked) {
-            localStorage.setItem("rememberMe", "true");
-            localStorage.setItem("savedEmail", email);
-            localStorage.setItem("savedPassword", password);
-          } else {
-            localStorage.removeItem("rememberMe");
-            localStorage.removeItem("savedEmail");
-            localStorage.removeItem("savedPassword");
-          }
-
-          window.location.href = "index.html";
-        }
-      });
+      showError("Please verify your email before logging in.");
     }
-  });
+  } catch (error) {
+    handleFailedAttempt();
+    let errorMsg;
+    switch (error.code) {
+      case "auth/invalid-email":
+        errorMsg = "Invalid email format.";
+        break;
+      case "auth/user-disabled":
+        errorMsg = "This user has been disabled.";
+        break;
+      case "auth/user-not-found":
+        errorMsg = "No user found with this email.";
+        break;
+      case "auth/wrong-password":
+        errorMsg = "Incorrect password.";
+        break;
+      default:
+        errorMsg = "Login failed. Please check your credentials.";
+        break;
+    }
+    showError(errorMsg);
+  }
 });
+
 
 function handleFailedAttempt() {
   let attempts = parseInt(localStorage.getItem("loginAttempts")) || 0;
   attempts++;
-
   if (attempts >= maxAttempts) {
     localStorage.setItem("loginLockoutTime", Date.now());
-    showError(`Too many failed attempts. Try again in 6 minutes.`);
+    showError("Too many failed attempts. Try again in 6 minutes.");
     checkLockout();
   } else {
     localStorage.setItem("loginAttempts", attempts);
@@ -94,13 +103,11 @@ function resetAttempts() {
 function isLockedOut() {
   const lockoutTimeStart = localStorage.getItem("loginLockoutTime");
   if (!lockoutTimeStart) return false;
-
   const timeElapsed = Date.now() - parseInt(lockoutTimeStart);
   if (timeElapsed >= lockoutTime) {
     resetAttempts();
     return false;
   }
-
   return true;
 }
 
