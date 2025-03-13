@@ -44,40 +44,59 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   sentMessage.style.display = "none";
 
   try {
-    const snapshot = await usersRef.once("value");
-    let userData = null;
-    let userKey = null;
-
-    snapshot.forEach((childSnapshot) => {
-      const data = childSnapshot.val();
-      if (data.email === email) {
-        userData = data;
-        userKey = childSnapshot.key;
-      }
-    });
-
-    if (!userData) {
-      handleFailedAttempt();
-    } else {
-      resetAttempts();
-
-      delete userData.password;
-
-      await changedPasswordRef.child(userKey).set(userData);
-
-      sentMessage.textContent = "Verification successful. Redirecting...";
+    // Check if the email exists in Firebase Authentication
+    const authUser = await firebase.auth().fetchSignInMethodsForEmail(email);
+    
+    if (authUser.length > 0) {
+      // Email found in Firebase Authentication, send reset email
+      await firebase.auth().sendPasswordResetEmail(email);
+      sentMessage.textContent = "Password reset link sent! Please check your email.";
       sentMessage.style.display = "block";
+      resetAttempts();
+    } else {
+      // Check if the email exists in Firebase Realtime Database
+      const snapshot = await usersRef.once("value");
+      let userData = null;
+      let userKey = null;
 
-      setTimeout(() => {
-        window.location.href = "login.html";
-      }, 2000);
+      snapshot.forEach((childSnapshot) => {
+        const data = childSnapshot.val();
+        if (data.email === email) {
+          userData = data;
+          userKey = childSnapshot.key;
+        }
+      });
+
+      if (userData) {
+        // Email found in Realtime Database, send reset email
+        await firebase.auth().sendPasswordResetEmail(email);
+        sentMessage.textContent = "Password reset link sent! Please check your email.";
+        sentMessage.style.display = "block";
+
+        // Optionally, save the reset request in the database
+        delete userData.password;
+        await changedPasswordRef.child(userKey).set(userData);
+        resetAttempts();
+      } else {
+        // Email not found in both Authentication and Database
+        handleFailedAttempt();
+        showErrorMessage("No account found with this email.");
+      }
     }
   } catch (error) {
-    showErrorMessage("An error occurred. Please try again.");
+    handleFailedAttempt();
+    if (error.code === "auth/invalid-email") {
+      showErrorMessage("Invalid email address.");
+    } else if (error.code === "auth/user-not-found") {
+      showErrorMessage("No account found with this email.");
+    } else {
+      showErrorMessage("An error occurred. Please try again.");
+    }
   } finally {
     loadingIndicator.style.display = "none";
   }
 });
+
 
 function handleFailedAttempt() {
   let attempts = parseInt(localStorage.getItem("forgotPasswordAttempts")) || 0;
