@@ -37,81 +37,77 @@ signupForm.addEventListener("submit", async (e) => {
   let errors = [];
 
   try {
-      console.log("Checking if email exists...");
-      const emailExists = await checkIfEmailExists(email);
+    const emailExists = await checkIfEmailExists(email);
+    if (emailExists) {
+      errors.push("This email is already registered.");
+    }
 
-      if (emailExists) {
-          errors.push("This email is already registered.");
-      }
+    if (mobileNum.length !== 11 || !/^\d{11}$/.test(mobileNum)) {
+      errors.push("Invalid mobile number. It must be exactly 11 digits.");
+    }
 
-      if (mobileNum.length !== 11 || !/^\d{11}$/.test(mobileNum)) {
-        errors.push("Invalid mobile number. It must be exactly 11 digits.");
-      }
+    if (password.length < 16) {
+      errors.push("Password must be at least 16 characters long.");
+    }
 
-      if (password.length < 16) {
-          errors.push("Password must be at least 16 characters long.");
-      }
+    if (password !== confirmPassword) {
+      errors.push("Passwords do not match.");
+    }
 
-      if (password !== confirmPassword) {
-          errors.push("Passwords do not match.");
-      }
-
-      if (errors.length > 0) {
-          console.log("Validation errors:", errors);
-          showErrors(errors);
-          toggleLoading(false);
-          return;
-      }
-
-      console.log("Saving user data...");
-      await saveUserData(firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password);
-      console.log("User data saved successfully.");
-
+    if (errors.length > 0) {
+      showErrors(errors);
       toggleLoading(false);
-      showSuccess("Signup successful!");
-      signupForm.reset();
+      return;
+    }
+
+    const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    await userCredential.user.sendEmailVerification();
+    const uid = userCredential.user.uid;
+
+    await saveUserData(uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password);
+    toggleLoading(false);
+    showSuccess("Signup successful! Verification email sent.");
+    signupForm.reset();
 
   } catch (error) {
-      console.error("Error during signup:", error);
-      showErrors(["Something went wrong. Please try again."]);
-      toggleLoading(false);
+    console.error("Error during signup:", error);
+    showErrors([error.message]);
+    toggleLoading(false);
   }
 });
 
 const checkIfEmailExists = async (email) => {
   return new Promise((resolve, reject) => {
-      const query = usersRef.orderByChild("email").equalTo(email).once("value");
-      const timeout = setTimeout(() => {
-          console.error("Firebase query timeout!");
-          reject(new Error("Firebase query timeout"));
-      }, 5000);
+    const query = usersRef.orderByChild("email").equalTo(email).once("value");
+    const timeout = setTimeout(() => {
+      reject(new Error("Firebase query timeout"));
+    }, 5000);
 
-      query.then(snapshot => {
-          clearTimeout(timeout);
-          resolve(snapshot.exists());
-      }).catch(error => {
-          clearTimeout(timeout);
-          console.error("Firebase read error:", error);
-          reject(error);
-      });
+    query.then(snapshot => {
+      clearTimeout(timeout);
+      resolve(snapshot.exists());
+    }).catch(error => {
+      clearTimeout(timeout);
+      reject(error);
+    });
   });
 };
 
-const saveUserData = (firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password) => {
-  return usersRef.push().set({
-      firstname,
-      lastname,
-      bdate,
-      address,
-      higherLicensed,
-      position,
-      availability,
-      typeOfVessel,
-      experience,
-      resume,
-      email,
-      mobile_number: mobileNum,
-      password
+const saveUserData = (uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password) => {
+  return usersRef.child(uid).set({
+    firstname,
+    lastname,
+    bdate,
+    address,
+    higherLicensed,
+    position,
+    availability,
+    typeOfVessel,
+    experience,
+    resume,
+    email,
+    mobile_number: mobileNum,
+    password
   });
 };
 
