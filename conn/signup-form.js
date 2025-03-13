@@ -33,6 +33,7 @@ signupForm.addEventListener("submit", async (e) => {
   const mobileNum = getElementVal("mobile-number");
   const password = getElementVal("password");
   const confirmPassword = getElementVal("confirm-password");
+  const status = "Pending";
 
   let errors = [];
 
@@ -64,7 +65,7 @@ signupForm.addEventListener("submit", async (e) => {
     await userCredential.user.sendEmailVerification();
     const uid = userCredential.user.uid;
 
-    await saveUserData(uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password);
+    await saveUserData(uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, status);
     toggleLoading(false);
     showSuccess("Signup successful! Verification email sent.");
     signupForm.reset();
@@ -93,7 +94,7 @@ const checkIfEmailExists = async (email) => {
   });
 };
 
-const saveUserData = (uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, password) => {
+const saveUserData = (uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, status) => {
   return usersRef.child(uid).set({
     firstname,
     lastname,
@@ -107,7 +108,7 @@ const saveUserData = (uid, firstname, lastname, bdate, address, higherLicensed, 
     resume,
     email,
     mobile_number: mobileNum,
-    password
+    status
   });
 };
 
