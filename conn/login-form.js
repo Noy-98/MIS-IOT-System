@@ -43,13 +43,17 @@ loginForm.addEventListener("submit", async function (e) {
     const user = userCredential.user;
 
     if (user.emailVerified) {
+      // Set the session with user UID
+      sessionStorage.setItem("uid", user.uid);
+
       // Check user status in the database
       const snapshot = await usersRef.orderByChild("email").equalTo(email).once("value");
-      
+
       if (snapshot.exists()) {
         const userData = snapshot.val();
         const userKey = Object.keys(userData)[0];
         const status = userData[userKey].status;
+        const userType = userData[userKey].user_type;
 
         if (status === "Pending") {
           showError("Your application & account is processing.");
@@ -68,7 +72,25 @@ loginForm.addEventListener("submit", async function (e) {
             localStorage.removeItem("savedEmail");
             localStorage.removeItem("savedPassword");
           }
-          window.location.href = "../../user/home-dashboard.html";
+
+          // Set the session with user type
+          sessionStorage.setItem("user_type", userType);
+
+          // Redirect based on user_type
+          switch (userType) {
+            case "Applicant":
+              window.location.href = "../../user/home-dashboard.html";
+              break;
+            case "Recruiter":
+              window.location.href = "../../recruiter/home-dashboard.html";
+              break;
+            case "Admin":
+              window.location.href = "../../admin/home-dashboard.html";
+              break;
+            default:
+              showError("Unknown user type. Please contact support.");
+              break;
+          }
           return;
         } else {
           showError("Unknown account status. Please contact support.");
@@ -104,7 +126,6 @@ loginForm.addEventListener("submit", async function (e) {
     showError(errorMsg);
   }
 });
-
 
 function handleFailedAttempt() {
   let attempts = parseInt(localStorage.getItem("loginAttempts")) || 0;

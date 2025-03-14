@@ -179,13 +179,6 @@
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../user/iotc-application-dashboard.html">
-          <i class="bi bi-input-cursor-text"></i>
-          <span>IOTC Application</span>
-        </a>
-      </li>
-
-      <li class="nav-item">
         <a class="nav-link collapsed" href="../user/assesment-dashboard.html">
           <i class="bi bi-card-heading"></i>
           <span>Assesment</span>
@@ -195,7 +188,7 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="../user/enrollment-dashboard.html">
           <i class="bi bi-calendar-check"></i>
-          <span>Payroll</span>
+          <span>Attendance</span>
         </a>
       </li>
 
@@ -236,8 +229,8 @@
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
   
-                <img src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
-                <h2>Kevin Anderson</h2>
+                <img id="p_picture" src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
+                <h2 id="full-name">Kevin Anderson</h2>
                 <h3>Applicant</h3>
               </div>
             </div>
@@ -314,14 +307,14 @@
                       </div>
   
                       <div class="row mb-3">
-                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
+                        <label for="fullName" id="first-name" class="col-md-4 col-lg-3 col-form-label">First Name</label>
                         <div class="col-md-8 col-lg-9">
                           <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
                         </div>
                       </div>
 
                       <div class="row mb-3">
-                        <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                         <div class="col-md-8 col-lg-9">
                           <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
                         </div>
@@ -460,6 +453,9 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/dashboard.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+  <script src="../conn/users-profile-dashboard.js"></script>
 
 </body>
 
