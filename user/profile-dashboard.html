@@ -124,14 +124,14 @@
         <li class="nav-item dropdown pe-3">
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-            <img src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <img id="profileImage" src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
+            <span id="fullNameSp" class="d-none d-md-block dropdown-toggle ps-2"></span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
-              <span>Applicant</span>
+              <h6 id="fullName">Full Name</h6>
+              <span id="position">Position</span>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -152,7 +152,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="#" onclick="logout()">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
@@ -228,10 +228,9 @@
   
             <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-  
-                <img id="p_picture" src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
-                <h2 id="full-name">Kevin Anderson</h2>
-                <h3>Applicant</h3>
+                <img id="dp" src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
+                <h2 id="full-name">Full Name</h2>
+                <h3 id="position2">Position</h3>
               </div>
             </div>
   
@@ -266,27 +265,62 @@
   
                     <div class="row">
                       <div class="col-lg-3 col-md-4 label ">First Name</div>
-                      <div class="col-lg-9 col-md-8">Kevin</div>
+                      <div class="col-lg-9 col-md-8" id="fname"></div>
                     </div>
   
                     <div class="row">
                       <div class="col-lg-3 col-md-4 label">Last Name</div>
-                      <div class="col-lg-9 col-md-8">Anderson</div>
+                      <div class="col-lg-9 col-md-8" id="lname"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Birth Date</div>
+                      <div class="col-lg-9 col-md-8" id="b-day"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Address</div>
+                      <div class="col-lg-9 col-md-8" id="add"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">With Higher Licensed</div>
+                      <div class="col-lg-9 col-md-8" id="licensed"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Position</div>
+                      <div class="col-lg-9 col-md-8" id="position3"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Availability</div>
+                      <div class="col-lg-9 col-md-8" id="avail"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Type of Vessel</div>
+                      <div class="col-lg-9 col-md-8" id="t-vess"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Experience</div>
+                      <div class="col-lg-9 col-md-8" id="exp"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-3 col-md-4 label">Resume</div>
+                      <div class="col-lg-9 col-md-8" id="res"></div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-3 col-md-4 label">Email</div>
-                        <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
+                        <div class="col-lg-9 col-md-8" id="em"></div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-3 col-md-4 label">Mobile Number</div>
-                        <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                      </div>
-  
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Address</div>
-                      <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
+                        <div class="col-lg-9 col-md-8" id="m-num"></div>
                     </div>
   
                   </div>

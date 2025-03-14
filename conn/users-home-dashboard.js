@@ -9,6 +9,10 @@ const firebaseConfig = {
   measurementId: "G-6VEP444ZBV"
 };
 
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 // Check session at the start (similar to PHP's session_start())
 const userType = sessionStorage.getItem("user_type");
 const userId = sessionStorage.getItem("uid");
@@ -45,5 +49,81 @@ function logout() {
   sessionStorage.clear();
   window.location.href = "../../login.html";
 }
+
+// Reference to the Firebase Realtime Database
+const dbRef = firebase.database().ref('UsersAccount/' + userId); // Replace 'userId' with the actual user ID
+
+// Fetch the profile picture from Firebase
+dbRef.once('value', (snapshot) => {
+    if (snapshot.exists()) {
+        const userData = snapshot.val();
+        const profileImageUrl = userData.p_picture;
+
+        if (profileImageUrl) {
+            const profileImage = document.getElementById('profileImage');
+            profileImage.src = profileImageUrl;
+        }
+    } else {
+        console.log("No user data found!");
+    }
+}, (error) => {
+    console.error("Error fetching user data:", error);
+});
+
+// Display placeholder content immediately to reduce perceived delay
+function showPlaceholder() {
+  const fullNameSpan = document.getElementById("fullNameSp");
+  const fullNameh6 = document.getElementById("fullName");
+  const positionSpan = document.getElementById("position");
+
+  fullNameSpan.textContent = "Loading...";
+  fullNameh6.textContent = "Loading...";
+  positionSpan.textContent = "Loading...";
+}
+
+// Fetch user details and update the profile name in real-time
+function updateProfileName() {
+  const userId = sessionStorage.getItem("uid");
+  const fullNameSpan = document.getElementById("fullNameSp");
+  const fullNameh6 = document.getElementById("fullName");
+  const positionSpan = document.getElementById("position");
+
+  // Show placeholder while fetching data
+  showPlaceholder();
+
+  if (userId) {
+    const userRef = database.ref("UsersAccount/" + userId);
+
+    // Real-time listener using 'on' method
+    userRef.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const firstName = data.firstname;
+        const lastName = data.lastname;
+        const pos = data.position;
+
+        if (firstName && lastName) {
+          const initials = firstName.charAt(0) + ". " + lastName;
+          fullNameSpan.textContent = initials;
+
+          // Update the dropdown header with full name and user position
+          fullNameh6.textContent = `${firstName} ${lastName}`;
+          positionSpan.textContent = pos;
+        } else {
+          console.error("First name or last name not found in database.");
+        }
+      } else {
+        console.error("User data not found in database.");
+      }
+    }, (error) => {
+      console.error("Error fetching user data:", error);
+    });
+  }
+}
+
+// Call the function to update the profile name in real-time
+updateProfileName();
+
+
 
 
