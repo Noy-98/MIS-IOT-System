@@ -1,17 +1,18 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyDgHMGvGUa-i8GzJrU3SFD3ER78rlFpShQ",
-  authDomain: "mis-system-proj.firebaseapp.com",
-  databaseURL: "https://mis-system-proj-default-rtdb.firebaseio.com",
-  projectId: "mis-system-proj",
-  storageBucket: "mis-system-proj.firebasestorage.app",
-  messagingSenderId: "393254491698",
-  appId: "1:393254491698:web:6931aa358e6bc686c80e2b",
-  measurementId: "G-6VEP444ZBV"
+  apiKey: "AIzaSyAzLyrICF8KsRMPFpCyR9_BoiBQbzSWQB8",
+  authDomain: "incuhatchtech-proj.firebaseapp.com",
+  databaseURL: "https://incuhatchtech-proj-default-rtdb.firebaseio.com",
+  projectId: "incuhatchtech-proj",
+  storageBucket: "incuhatchtech-proj.appspot.com",
+  messagingSenderId: "400858536985",
+  appId: "1:400858536985:web:109eb10ba1992d5507de88",
+  measurementId: "G-6YQX165W8B"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const usersRef = firebase.database().ref("UsersAccount");
+const storageRef = firebase.storage().ref("Resumes");
 const signupForm = document.getElementById("signupForm");
 
 signupForm.addEventListener("submit", async (e) => {
@@ -28,18 +29,22 @@ signupForm.addEventListener("submit", async (e) => {
   const availability = getElementVal("availability");
   const typeOfVessel = getElementVal("type-of-vessel");
   const experience = getElementVal("experience");
-  const resume = getElementVal("resume");
   const email = getElementVal("email");
   const mobileNum = getElementVal("mobile-number");
   const password = getElementVal("password");
   const confirmPassword = getElementVal("confirm-password");
+  const resumeFile = document.getElementById("resume").files[0];
   const status = "Pending";
-  const p_picture = "../../uploads/profile_icon.png";
+  const p_picture = "https://firebasestorage.googleapis.com/v0/b/incuhatchtech-proj.appspot.com/o/Applicant%20Profile%20Pictures%2Fprofile_icon.png?alt=media&token=10ed007b-0192-4966-8b06-6d9eb1bf72ac";
   const user_type = "Applicant";
 
   let errors = [];
 
   try {
+    if (!resumeFile || resumeFile.type !== "application/pdf") {
+      errors.push("Please upload a valid PDF file as your resume.");
+    }
+
     const emailExists = await checkIfEmailExists(email);
     if (emailExists) {
       errors.push("This email is already registered.");
@@ -67,17 +72,34 @@ signupForm.addEventListener("submit", async (e) => {
     await userCredential.user.sendEmailVerification();
     const uid = userCredential.user.uid;
 
-    await saveUserData(uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resume, email, mobileNum, status, p_picture, user_type);
+    const resumeUrl = await uploadResume(uid, resumeFile);
+    
+    await saveUserData(uid, firstname, lastname, bdate, address, higherLicensed, position, availability, typeOfVessel, experience, resumeUrl, email, mobileNum, status, p_picture, user_type);
     toggleLoading(false);
     showSuccess("Signup successful! Verification email sent.");
     signupForm.reset();
-
   } catch (error) {
     console.error("Error during signup:", error);
     showErrors([error.message]);
     toggleLoading(false);
   }
 });
+
+const uploadResume = (uid, file) => {
+  return new Promise((resolve, reject) => {
+    const fileRef = storageRef.child(`${uid}.pdf`);
+    const uploadTask = fileRef.put(file);
+
+    uploadTask.on("state_changed", 
+      (snapshot) => {},
+      (error) => reject(error),
+      async () => {
+        const url = await uploadTask.snapshot.ref.getDownloadURL();
+        resolve(url);
+      }
+    );
+  });
+};
 
 const checkIfEmailExists = async (email) => {
   return new Promise((resolve, reject) => {

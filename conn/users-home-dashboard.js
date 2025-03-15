@@ -1,12 +1,12 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyDgHMGvGUa-i8GzJrU3SFD3ER78rlFpShQ",
-  authDomain: "mis-system-proj.firebaseapp.com",
-  databaseURL: "https://mis-system-proj-default-rtdb.firebaseio.com",
-  projectId: "mis-system-proj",
-  storageBucket: "mis-system-proj.firebasestorage.app",
-  messagingSenderId: "393254491698",
-  appId: "1:393254491698:web:6931aa358e6bc686c80e2b",
-  measurementId: "G-6VEP444ZBV"
+  apiKey: "AIzaSyAzLyrICF8KsRMPFpCyR9_BoiBQbzSWQB8",
+  authDomain: "incuhatchtech-proj.firebaseapp.com",
+  databaseURL: "https://incuhatchtech-proj-default-rtdb.firebaseio.com",
+  projectId: "incuhatchtech-proj",
+  storageBucket: "incuhatchtech-proj.appspot.com",
+  messagingSenderId: "400858536985",
+  appId: "1:400858536985:web:109eb10ba1992d5507de88",
+  measurementId: "G-6YQX165W8B"
 };
 
 // Initialize Firebase

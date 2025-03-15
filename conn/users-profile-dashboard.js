@@ -1,12 +1,12 @@
 const firebaseConfig = {
-  apiKey: "AIzaSyDgHMGvGUa-i8GzJrU3SFD3ER78rlFpShQ",
-  authDomain: "mis-system-proj.firebaseapp.com",
-  databaseURL: "https://mis-system-proj-default-rtdb.firebaseio.com",
-  projectId: "mis-system-proj",
-  storageBucket: "mis-system-proj.firebasestorage.app",
-  messagingSenderId: "393254491698",
-  appId: "1:393254491698:web:6931aa358e6bc686c80e2b",
-  measurementId: "G-6VEP444ZBV"
+  apiKey: "AIzaSyAzLyrICF8KsRMPFpCyR9_BoiBQbzSWQB8",
+  authDomain: "incuhatchtech-proj.firebaseapp.com",
+  databaseURL: "https://incuhatchtech-proj-default-rtdb.firebaseio.com",
+  projectId: "incuhatchtech-proj",
+  storageBucket: "incuhatchtech-proj.appspot.com",
+  messagingSenderId: "400858536985",
+  appId: "1:400858536985:web:109eb10ba1992d5507de88",
+  measurementId: "G-6YQX165W8B"
 };
 
 // Initialize Firebase
@@ -50,46 +50,118 @@ function logout() {
   window.location.href = "../../login.html";
 }
 
-// Upload profile picture
-const uploadButton = document.getElementById('uploadProfilePic');
-uploadButton.addEventListener('click', function () {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/jpeg, image/png, image/jpg';
+const storage = firebase.storage();
+const storageRef = storage.ref();
+const profilePicInput = document.createElement("input");
+profilePicInput.type = "file";
+profilePicInput.accept = "image/png, image/jpeg, image/jpg";
 
-    input.onchange = async function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append('profilePic', file);
+const resumeInput = document.getElementById("rE");
+resumeInput.accept = "application/pdf";
 
-            try {
-                const response = await fetch('../../../conn/upload.php', {
-                    method: 'POST',
-                    body: formData,
-                });
+// Open file explorer when clicking the updateProfilePic button
+document.getElementById("updateProfilePic").addEventListener("click", () => {
+    profilePicInput.click();
+});
 
-                if (response.ok) {
-                  const result = await response.json();
-                  const filePath = result.filePath;
-              
-                  // Save the file path to Firebase
-                  const dbRef = firebase.database().ref('UsersAccount/' + userId);
-                  await dbRef.update({ p_picture: filePath });
-              
-                  alert("Profile picture uploaded successfully!");
-                  document.getElementById('dp2').src = filePath;
-              } else {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-          } catch (error) {
-              alert("Error uploading profile picture to server: " + error.message);
-              console.error(error);
-          }
+profilePicInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file) {
+        const profilePicPath = `Applicant Profile Pictures/${userId}_${file.name}`;
+        const uploadTask = storageRef.child(profilePicPath).put(file);
+
+        uploadTask.then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
+            database.ref(`UsersAccount/${userId}`).update({ p_picture: url });
+            document.getElementById("dp2").src = url;
+        }).catch(console.error);
+    }
+});
+
+// Delete profile picture
+document.getElementById("deleteProfilePic").addEventListener("click", () => {
+    dbRef.once("value", (snapshot) => {
+        const userData = snapshot.val();
+        if (userData.p_picture && !userData.p_picture.includes("profile_icon.png")) {
+            const fileRef = storage.refFromURL(userData.p_picture);
+            fileRef.delete().then(() => {
+                database.ref(`UsersAccount/${userId}`).update({ p_picture: "https://firebasestorage.googleapis.com/v0/b/incuhatchtech-proj.appspot.com/o/Applicant%20Profile%20Pictures%2Fprofile_icon.png?alt=media&token=10ed007b-0192-4966-8b06-6d9eb1bf72ac" });
+                document.getElementById("dp2").src = "https://firebasestorage.googleapis.com/v0/b/incuhatchtech-proj.appspot.com/o/Applicant%20Profile%20Pictures%2Fprofile_icon.png?alt=media&token=10ed007b-0192-4966-8b06-6d9eb1bf72ac";
+            }).catch(console.error);
         }
-    };
+    });
+});
 
-    input.click();
+// Open file explorer when clicking resume input field
+resumeInput.addEventListener("change", function () {
+    const file = this.files[0];
+    if (file && file.type === "application/pdf") {
+        const resumePath = `Resumes/${userId}_${file.name}`;
+        const uploadTask = storageRef.child(resumePath).put(file);
+
+        uploadTask.then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
+            database.ref(`UsersAccount/${userId}`).update({ resume: url });
+        }).catch(console.error);
+    }
+});
+
+// Update all input fields on submit
+document.getElementById("changeInfoForm").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const updatedData = {
+        firstname: document.getElementById("fN").value,
+        lastname: document.getElementById("lN").value,
+        bdate: document.getElementById("bD").value,
+        address: document.getElementById("aD").value,
+        higherLicensed: document.getElementById("lD").value,
+        position: document.getElementById("pN").value,
+        availability: document.getElementById("aY").value,
+        typeOfVessel: document.getElementById("tV").value,
+        experience: document.getElementById("exP").value,
+        mobile_number: document.getElementById("Phone").value,
+    };
+    database.ref(`UsersAccount/${userId}`).update(updatedData).then(() => {
+        alert("Profile updated successfully");
+    }).catch(console.error);
+});
+
+document.getElementById("changePasswordForm").addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const user = firebase.auth().currentUser;
+  if (!user) {
+      alert("No user is currently logged in.");
+      return;
+  }
+
+  const currentPassword = document.getElementById("currentPassword").value;
+  const newPassword = document.getElementById("newPassword").value;
+  const renewPassword = document.getElementById("renewPassword").value;
+
+  // Validate new password length
+  if (newPassword.length < 16) {
+      alert("New password must be at least 16 characters long.");
+      return;
+  }
+
+  // Validate password match
+  if (newPassword !== renewPassword) {
+      alert("New password and Re-entered password do not match.");
+      return;
+  }
+
+  try {
+      // Re-authenticate user with current password
+      const credential = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+      await user.reauthenticateWithCredential(credential);
+
+      // Update the password in Firebase Authentication
+      await user.updatePassword(newPassword);
+
+      alert("Password successfully updated!");
+      document.getElementById("changePasswordForm").reset();
+  } catch (error) {
+      alert("Error: " + error.message);
+  }
 });
 
 
@@ -102,6 +174,7 @@ dbRef.once('value', (snapshot) => {
     if (snapshot.exists()) {
         const userData = snapshot.val();
         const profileImageUrl = userData.p_picture;
+        const resumePdfUrl = userData.resume;
 
         if (profileImageUrl) {
             const profileImage = document.getElementById('profileImage');
@@ -111,6 +184,11 @@ dbRef.once('value', (snapshot) => {
             dpicture.src = profileImageUrl;
             dpicture2.src = profileImageUrl;
         }
+
+        if (resumePdfUrl) {
+          const resume = document.getElementById('res');
+          resume.src = resumePdfUrl;
+      }
     } else {
         console.log("No user data found!");
     }
@@ -134,7 +212,6 @@ function showPlaceholder() {
   const availability = document.getElementById("avail");
   const tVessel = document.getElementById("t-vess");
   const experience = document.getElementById("exp");
-  const resume = document.getElementById("res");
   const email = document.getElementById("em");
   const mNum = document.getElementById("m-num");
 
@@ -152,7 +229,6 @@ function showPlaceholder() {
   availability.textContent = "Loading...";
   tVessel.textContent = "Loading...";
   experience.textContent = "Loading...";
-  resume.textContent = "Loading...";
   email.textContent = "Loading...";
   mNum.textContent = "Loading...";
 }
@@ -174,7 +250,6 @@ function updateProfileName() {
   const availability = document.getElementById("avail");
   const tVessel = document.getElementById("t-vess");
   const experience = document.getElementById("exp");
-  const resume = document.getElementById("res");
   const email = document.getElementById("em");
   const mNum = document.getElementById("m-num");
 
@@ -197,7 +272,6 @@ function updateProfileName() {
         const availa = data.availability;
         const typeVessel = data.typeOfVessel;
         const exper = data.experience;
-        const resum = data.resume;
         const emai = data.email;
         const mobileNum = data.mobile_number;
         
@@ -220,7 +294,6 @@ function updateProfileName() {
           availability.textContent = availa;
           tVessel.textContent = typeVessel;
           experience.textContent = exper;
-          resume.textContent = resum;
           email.textContent = emai;
           mNum.textContent = mobileNum;
         } else {
