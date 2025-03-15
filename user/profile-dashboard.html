@@ -328,13 +328,13 @@
                   <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
   
                     <!-- Profile Edit Form -->
-                    <form>
+                    <form id="changeInfoForm">
                       <div class="row mb-3">
                         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                         <div class="col-md-8 col-lg-9">
-                          <img src="../assets/img/profile-icon.png" alt="Profile">
+                          <img id="dp2" src="../assets/img/profile-icon.png" alt="Profile" class="rounded-circle">
                           <div class="pt-2">
-                            <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
+                            <a href="#" id="uploadProfilePic" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
                             <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
                           </div>
                         </div>
@@ -343,35 +343,84 @@
                       <div class="row mb-3">
                         <label for="fullName" id="first-name" class="col-md-4 col-lg-3 col-form-label">First Name</label>
                         <div class="col-md-8 col-lg-9">
-                          <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                          <input type="text" class="form-control" id="fN">
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
                         <div class="col-md-8 col-lg-9">
-                          <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
+                          <input type="text" class="form-control" id="lN">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Birth Date</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="date" class="form-control" id="bD">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Address</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="aD">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">With Higher Licensed</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="lD">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Position</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="pN">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Availability</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="aY">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Type of Vessel</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="tV">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Experience</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="exP">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Resume</label>
+                        <div class="col-md-8 col-lg-9">
+                          <input type="text" class="form-control" id="rE">
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                         <div class="col-md-8 col-lg-9">
-                          <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
+                          <input type="email" class="form-control" id="eM">
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Mobile Number</label>
                         <div class="col-md-8 col-lg-9">
-                          <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-                        </div>
-                      </div>
-  
-                      <div class="row mb-3">
-                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
+                          <input type="text" class="form-control" id="Phone">
                         </div>
                       </div>
 

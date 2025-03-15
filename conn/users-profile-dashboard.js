@@ -50,6 +50,50 @@ function logout() {
   window.location.href = "../../login.html";
 }
 
+// Upload profile picture
+const uploadButton = document.getElementById('uploadProfilePic');
+uploadButton.addEventListener('click', function () {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/jpeg, image/png, image/jpg';
+
+    input.onchange = async function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('profilePic', file);
+
+            try {
+                const response = await fetch('../../../conn/upload.php', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                  const result = await response.json();
+                  const filePath = result.filePath;
+              
+                  // Save the file path to Firebase
+                  const dbRef = firebase.database().ref('UsersAccount/' + userId);
+                  await dbRef.update({ p_picture: filePath });
+              
+                  alert("Profile picture uploaded successfully!");
+                  document.getElementById('dp2').src = filePath;
+              } else {
+                  throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+          } catch (error) {
+              alert("Error uploading profile picture to server: " + error.message);
+              console.error(error);
+          }
+        }
+    };
+
+    input.click();
+});
+
+
+
 // Reference to the Firebase Realtime Database
 const dbRef = firebase.database().ref('UsersAccount/' + userId); // Replace 'userId' with the actual user ID
 
@@ -62,8 +106,10 @@ dbRef.once('value', (snapshot) => {
         if (profileImageUrl) {
             const profileImage = document.getElementById('profileImage');
             const dpicture = document.getElementById('dp');
+            const dpicture2 = document.getElementById('dp2');
             profileImage.src = profileImageUrl;
             dpicture.src = profileImageUrl;
+            dpicture2.src = profileImageUrl;
         }
     } else {
         console.log("No user data found!");
