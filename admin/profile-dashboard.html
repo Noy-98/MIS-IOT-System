@@ -36,90 +36,15 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="../admin/home-dashboard.html" class="logo d-flex align-items-center">
 
-        <span class="d-none d-lg-block">Applicant Dashboard</span>
+        <span class="d-none d-lg-block">Admin Dashboard</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
-
-        <li class="nav-item dropdown">
-
-          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-            <i class="bi bi-bell"></i>
-            <span class="badge bg-primary badge-number">4</span>
-          </a><!-- End Notification Icon -->
-
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill btn btn-danger p-2 ms-2">Clear all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-x-circle text-danger"></i>
-              <div>
-                <h4>Atque rerum nesciunt</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>1 hr. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-check-circle text-success"></i>
-              <div>
-                <h4>Sit rerum fuga</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>2 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-info-circle text-primary"></i>
-              <div>
-                <h4>Dicta reprehenderit</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>4 hrs. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li class="dropdown-footer">
-              <a href="#">Show all notifications</a>
-            </li>
-
-          </ul><!-- End Notification Dropdown Items -->
-
-        </li><!-- End Notification Nav -->
 
         <li class="nav-item dropdown pe-3">
 
@@ -138,7 +63,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="../user/profile-dashboard.html">
+              <a class="dropdown-item d-flex align-items-center" href="../admin/profile-dashboard.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -172,28 +97,35 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../user/home-dashboard.html">
+        <a class="nav-link collapsed" href="../admin/home-dashboard.html">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../user/assesment-dashboard.html">
-          <i class="bi bi-card-heading"></i>
-          <span>Assesment</span>
+        <a class="nav-link collapsed" href="../admin/add-admin-dashboard.html">
+          <i class="bi bi-plus-square"></i>
+          <span>Add Admin</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../user/enrollment-dashboard.html">
-          <i class="bi bi-calendar-check"></i>
-          <span>Attendance</span>
+        <a class="nav-link collapsed" href="../admin/add-recruiter.html">
+          <i class="bi bi-plus-square"></i>
+          <span>Add Recruiter</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link " href="../user/profile-dashboard.html">
+        <a class="nav-link collapsed" href="../admin/contact-list-dashboard.html">
+          <i class="bi bi-person-lines-fill"></i>
+          <span>Contact List</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link " href="../admin/profile-dashboard.html">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -216,7 +148,7 @@
       <h1>Profile Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="../user/home-dashboard.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="../admin/home-dashboard.html">Home</a></li>
           <li class="breadcrumb-item active">Dashboard</li>
         </ol>
       </nav>
@@ -284,28 +216,8 @@
                     </div>
 
                     <div class="row">
-                      <div class="col-lg-3 col-md-4 label">With Higher Licensed</div>
-                      <div class="col-lg-9 col-md-8" id="licensed"></div>
-                    </div>
-
-                    <div class="row">
                       <div class="col-lg-3 col-md-4 label">Position</div>
                       <div class="col-lg-9 col-md-8" id="position3"></div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Availability</div>
-                      <div class="col-lg-9 col-md-8" id="avail"></div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Type of Vessel</div>
-                      <div class="col-lg-9 col-md-8" id="t-vess"></div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Experience</div>
-                      <div class="col-lg-9 col-md-8" id="exp"></div>
                     </div>
 
                     <div class="row">
@@ -316,11 +228,6 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-4 label">Mobile Number</div>
                         <div class="col-lg-9 col-md-8" id="m-num"></div>
-                    </div>
-
-                    <div class="row">
-                      <div class="col-lg-3 col-md-4 label">Resume</div>
-                      <iframe id="res" width="100%" height="500px" style="border: 2px solid #ccc;"></iframe>
                     </div>
   
                   </div>
@@ -369,44 +276,9 @@
                       </div>
 
                       <div class="row mb-3">
-                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">With Higher Licensed</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input type="text" class="form-control" id="lD">
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
                         <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Position</label>
                         <div class="col-md-8 col-lg-9">
                           <input type="text" class="form-control" id="pN">
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
-                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Availability</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input type="text" class="form-control" id="aY">
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
-                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Type of Vessel</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input type="text" class="form-control" id="tV">
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
-                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Experience</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input type="text" class="form-control" id="exP">
-                        </div>
-                      </div>
-
-                      <div class="row mb-3">
-                        <label for="fullName" id="last-name" class="col-md-4 col-lg-3 col-form-label">Resume</label>
-                        <div class="col-md-8 col-lg-9">
-                          <input type="file" class="form-control" id="rE">
                         </div>
                       </div>
 
@@ -531,7 +403,7 @@
   <script src="../assets/js/dashboard.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
-  <script src="../conn/users-profile-dashboard.js"></script>
+  <script src="../conn/admin-profile-dashboard.js"></script>
 
 </body>
 
