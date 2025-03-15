@@ -20,11 +20,11 @@ const userId = sessionStorage.getItem("uid");
 if (!userType || !userId) {
   // Redirect to the login page if session is missing
   alert("Session expired or not found. Please log in again.");
-  window.location.href = "../../login.html";
+  window.location.href = "MIS-IOT-System/login.html";
 } else if (userType !== "Applicant") {
   // If the user type is not "Applicant", redirect to login
   alert("Unauthorized access. Redirecting to login.");
-  window.location.href = "../../login.html";
+  window.location.href = "MIS-IOT-System/login.html";
 } else {
   console.log("Session exists: user_type = " + userType + ", uid = " + userId);
 }
@@ -47,7 +47,7 @@ window.onload = function () {
 function logout() {
   // Clear session storage and redirect to login page
   sessionStorage.clear();
-  window.location.href = "../../login.html";
+  window.location.href = "MIS-IOT-System/login.html";
 }
 
 // Reference to the Firebase Realtime Database

@@ -79,13 +79,13 @@ loginForm.addEventListener("submit", async function (e) {
           // Redirect based on user_type
           switch (userType) {
             case "Applicant":
-              window.location.href = "../../user/home-dashboard.html";
+              window.location.href = "MIS-IOT-System/user/home-dashboard.html";
               break;
             case "Recruiter":
-              window.location.href = "../../recruiter/home-dashboard.html";
+              window.location.href = "MIS-IOT-System/recruiter/home-dashboard.html";
               break;
             case "Admin":
-              window.location.href = "../../admin/home-dashboard.html";
+              window.location.href = "MIS-IOT-System/admin/home-dashboard.html";
               break;
             default:
               showError("Unknown user type. Please contact support.");
