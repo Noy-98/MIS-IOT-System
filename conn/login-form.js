@@ -82,7 +82,7 @@ loginForm.addEventListener("submit", async function (e) {
               window.location.href = "../../user/home-dashboard.html";
               break;
             case "Recruiter":
-              window.location.href = "../../../recruiter/home-dashboard.html";
+              window.location.href = "/MIS-IOT-System/recruiter/home-dashboard.html";
               break;
             case "Admin":
               window.location.href = "../../admin/home-dashboard.html";
