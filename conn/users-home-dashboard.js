@@ -121,8 +121,141 @@ function updateProfileName() {
   }
 }
 
+function updateAssessmentCounts() {
+  const userId = sessionStorage.getItem("uid");
+
+  if (!userId) {
+      console.error("User ID not found in session storage.");
+      return;
+  }
+
+  // Get user details (lastname and email) from UsersAccount
+  const userRef = database.ref("UsersAccount/" + userId);
+  userRef.once("value", (snapshot) => {
+      if (snapshot.exists()) {
+          const userData = snapshot.val();
+          const userLastName = userData.lastname?.trim(); // Trim spaces
+          const userEmail = userData.email?.trim();
+
+          if (!userLastName || !userEmail) {
+              console.error("User last name or email is missing.");
+              return;
+          }
+
+          console.log(`✅ User Info: LastName=${userLastName}, Email=${userEmail}`);
+
+          // Count total assessments in AssesmentForm
+          const assesmentFormRef = database.ref("AssesmentForm");
+          assesmentFormRef.once("value", (assesmentSnapshot) => {
+              let totalAssessments = assesmentSnapshot.numChildren();
+              console.log(`📌 Total Assessments Available: ${totalAssessments}`);
+              document.getElementById("totalNumberOfAssesment").textContent = totalAssessments;
+          });
+
+          // Count assessments taken by the user in ApplicantAssesmentForm
+          const applicantAssesmentRef = database.ref("ApplicantAssesmentForm");
+          applicantAssesmentRef.once("value", (assesmentSnapshot) => {
+              let takenAssessments = 0;
+
+              if (assesmentSnapshot.exists()) {
+                  assesmentSnapshot.forEach((assessment) => {
+                      const assessmentName = assessment.key; // e.g., "Mathematics", "Science"
+                      console.log(`🔍 Checking Assessment: ${assessmentName}`);
+
+                      const lastNameRef = assessment.child(userLastName);
+
+                      if (lastNameRef.exists()) {
+                          console.log(`🟢 Last Name Match Found: ${userLastName}`);
+
+                          // Directly check if an email key exists inside the last name node
+                          lastNameRef.forEach((entry) => {
+                              if (entry.key === "email" && entry.val().trim() === userEmail) {
+                                  takenAssessments++;
+                                  console.log(`✅ Matched Email for: ${assessmentName}`);
+                              }
+                          });
+                      }
+                  });
+              } else {
+                  console.warn("⚠️ No assessments found in ApplicantAssesmentForm.");
+              }
+
+              console.log(`📊 Total Assessments Taken: ${takenAssessments}`);
+              document.getElementById("numberOfAssesmentTake").textContent = takenAssessments;
+          });
+      } else {
+          console.error("❌ User data not found in UsersAccount.");
+      }
+  });
+}
+
+  // Reference to AssesmentForm in Firebase
+const assesmentRef = database.ref("AssesmentForm");
+
+// Load and display assessments in the table
+function loadAssessments() {
+  assesmentRef.on("value", (snapshot) => {
+      const tbody = document.querySelector("table tbody");
+      tbody.innerHTML = ""; // Clear existing data
+
+      if (snapshot.exists()) {
+          snapshot.forEach((childSnapshot) => {
+              const data = childSnapshot.val();
+              const assesmentName = childSnapshot.key;
+
+              const row = `
+                  <tr>
+                      <td>${assesmentName}</td>
+                      <td><a href="${data.lesson_link}" target="_blank">${data.lesson_link}</a></td>
+                      <td><a href="${data.g_form_link}" target="_blank">${data.g_form_link}</a></td>
+                      <td>${data.time}</td>
+                      <td>${data.date}</td>
+                      <td>${data.expiration}</td>
+                      <td>
+                          <button type="button" class="btn btn-success" onclick="done('${assesmentName}')">Done</button>
+                      </td>
+                  </tr>
+              `;
+
+              tbody.innerHTML += row;
+          });
+      } else {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center">No assessments found.</td></tr>`;
+      }
+  });
+}
+
+function done(assesmentName) {
+  sessionStorage.setItem("selected_assesment_name", assesmentName); // Store selected RFID key
+  window.location.href = "assesment-view-dashboard.html"; // Navigate to history page
+}
+
+function filterTable() {
+  let input = document.getElementById("searchInput").value.toLowerCase();
+  let table = document.querySelector("table tbody");
+  let rows = table.getElementsByTagName("tr");
+
+  for (let row of rows) {
+      let assesment_name = row.cells[0].textContent.toLowerCase();
+
+      // Show row if any column matches the search input
+      if (
+          assesment_name.includes(input)
+      ) {
+          row.style.display = ""; // Show row
+      } else {
+          row.style.display = "none"; // Hide row
+      }
+  }
+}
+
 // Call the function to update the profile name in real-time
 updateProfileName();
+
+// Call function to update assessment counts
+updateAssessmentCounts();
+
+loadAssessments();
 
 
 

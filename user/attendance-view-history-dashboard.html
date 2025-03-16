@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home Dashboard</title>
+  <title>Attendance Dashboard</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -97,14 +97,14 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="../user/home-dashboard.html">
+        <a class="nav-link collapsed" href="../user/home-dashboard.html">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
         </a>
       </li><!-- End Dashboard Nav -->
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="../user/attendance-dashboard.html">
+        <a class="nav-link " href="../user/attendance-dashboard.html">
           <i class="bi bi-calendar-check"></i>
           <span>Attendance</span>
         </a>
@@ -138,7 +138,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Attendance Dashboard</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="../user/home-dashboard.html">Home</a></li>
@@ -148,136 +148,39 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-      <div class="row">
-
-        <!-- Left side columns -->
-        <div class="col-lg-12">
-          <div class="row">
-
-            <!-- Test -->
-            <div class="col-xxl-3 col-xl-12">
-
-              <div class="card info-card customers-card">
-
-                <div class="card-body">
-                  <h5 class="card-title">Assesment</h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-card-checklist"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6 id="numberOfAssesmentTake">0</h6>
-                      <span class="text-muted small pt-2 ps-1">of</span> <span class="text-success small pt-1 fw-bold" id="totalNumberOfAssesment">0</span> <span class="text-muted small pt-2 ps-1">completed</span>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div><!-- Test -->
-
-            <!-- Courses -->
-            <div class="col-12">
-              <div class="card recent-sales overflow-auto">
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
       
-                <div class="card-body">
-                  <h5 class="card-title">Assesment list</h5>
-  
-                  <input type="text" id="searchInput" class="form-control" placeholder="Search assesment..." onkeyup="filterTable()"><br>
-  
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Assesment Name</th>
-                        <th scope="col">Lesson Link</th>
-                        <th scope="col">G-Form Link</th>
-                        <th scope="col">Time</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Expiration</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div><!-- Courses -->
-          </div>
-        </div><!-- End Left side columns -->
-
-        <!-- Right side columns -->
-        <!--<div class="col-lg-4">
-           
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Calendar</h5>
-
-              <div class="card-body pb-0">
-                <div class="datepicker">
-                  <div class="datepicker-top">
-                    <div class="month-selector">
-                      <button class="arrow"><i class="bi bi-arrow-left"></i></button>
-                      <span class="month-name">December 2020</span>
-                      <button class="arrow"><i class="bi bi-arrow-right"></i></button>
+                <div class="col-12">
+                  <div class="card recent-sales overflow-auto">
+      
+                    <div class="card-body">
+                      <h5 class="card-title">Attendance list</h5>
+      
+                      <input type="text" id="searchInput" class="form-control" placeholder="Search..." onkeyup="filterTable()"><br>
+      
+                      <table class="table table-borderless">
+                        <thead>
+                          <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Time In</th>
+                            <th scope="col">Time Out</th>
+                            <th scope="col">Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                      </table>
+      
                     </div>
+      
                   </div>
-                  <div class="datepicker-calendar">
-                    <span class="day">Mo</span>
-                    <span class="day">Tu</span>
-                    <span class="day">We</span>
-                    <span class="day">Th</span>
-                    <span class="day">Fr</span>
-                    <span class="day">Sa</span>
-                    <span class="day">Su</span>
-                    <button class="date faded">30</button>
-                    <button class="date">1</button>
-                    <button class="date">2</button>
-                    <button class="date">3</button>
-                    <button class="date">4</button>
-                    <button class="date">5</button>
-                    <button class="date">6</button>
-                    <button class="date">7</button>
-                    <button class="date">8</button>
-                    <button class="date current-day">9</button>
-                    <button class="date">10</button>
-                    <button class="date">11</button>
-                    <button class="date">12</button>
-                    <button class="date">13</button>
-                    <button class="date">14</button>
-                    <button class="date">15</button>
-                    <button class="date">16</button>
-                    <button class="date">17</button>
-                    <button class="date">18</button>
-                    <button class="date">19</button>
-                    <button class="date">20</button>
-                    <button class="date">21</button>
-                    <button class="date">22</button>
-                    <button class="date">23</button>
-                    <button class="date">24</button>
-                    <button class="date">25</button>
-                    <button class="date">26</button>
-                    <button class="date">27</button>
-                    <button class="date">28</button>
-                    <button class="date">29</button>
-                    <button class="date">30</button>
-                    <button class="date">31</button>
-                    <button class="date faded">1</button>
-                    <button class="date faded">2</button>
-                    <button class="date faded">3</button>
-                  </div>
-                </div>
+                </div><!-- Courses -->
               </div>
-
-              
             </div>
           </div>
-
-        </div>--><!-- End Right side columns -->
-
-      </div>
     </section>
 
   </main><!-- End #main -->
@@ -304,7 +207,7 @@
   <script src="../assets/js/dashboard.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
-  <script src="../conn/users-home-dashboard.js"></script>
+  <script src="../conn/users-attendance-view-history-dashboard.js"></script>
 
 
 </body>
