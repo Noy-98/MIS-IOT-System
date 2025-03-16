@@ -50,33 +50,35 @@ const firebaseConfig = {
     window.location.href = "../../login.html";
   }
 
-function loadRfid() {
-    const rfidRef = database.ref("ScanTag");
+  function loadView() {
+    const assesmentName = sessionStorage.getItem("selected_assesment_name"); // Get selected RFID key
+    if (!assesmentName) {
+        alert("No Assesment item selected. Redirecting...");
+        window.location.href = "assesment-dashboard.html"; // Redirect back if no RFID selected
+        return;
+    }
+
+    const assesmentNameRef = database.ref("ApplicantAssesmentForm/" + assesmentName);
     const tbody = document.querySelector("tbody"); // Get tbody of the table
 
-    rfidRef.on("value", (snapshot) => {
+    assesmentNameRef.on("value", (snapshot) => {
         tbody.innerHTML = ""; // Clear table before adding new data
 
         snapshot.forEach((childSnapshot) => {
-            const rfid = childSnapshot.val();
-            const rfidKey = childSnapshot.key;
+            const log = childSnapshot.val();
+            const logKey = childSnapshot.key;
 
             // Create table row dynamically
             const row = document.createElement("tr");
             row.innerHTML = `
-                <td>${rfidKey}</td>
-                <td>${rfid.lastname || ""}, ${rfid.firstname || ""}</td>
-                <td>${rfid.email || ""}</td>
-                <td>${rfid.attendance_status || ""}</td>
-                <td>${rfid.time_in || ""}</td>
-                <td>${rfid.time_out || ""}</td>
-                <td>${rfid.date || ""}</td>
-                <td>${rfid.rfid_status || ""}</td>
+                <td>${log.firstname || ""}</td>
+                <td>${log.lastname || ""}</td>
+                <td>${log.email || ""}</td>
+                <td>${log.position || ""}</td>
+                <td><a href="${log.screenshot}" target="_blank">${log.screenshot}</a></td>
+                <td>${log.status || ""}</td>
                 <td>
-                    <button type="button" class="btn btn-success" onclick="viewHistory('${rfidKey}')">View</button>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger" onclick="deleteRFID('${rfidKey}')">Delete</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteLogs('${assesmentName}', '${logKey}')">Delete</button>
                 </td>
             `;
 
@@ -85,25 +87,23 @@ function loadRfid() {
     });
 }
 
-function viewHistory(rfidKey) {
-    sessionStorage.setItem("selected_rfidKey", rfidKey); // Store selected RFID key
-    window.location.href = "rfid-registration-view-history-dashboard.html"; // Navigate to history page
-}
-
-
-// Function to delete user from Firebase
-function deleteRFID(rfidKey) {
-    if (confirm("Are you sure you want to delete this rfid?")) {
-        const rfidRef = database.ref("ScanTag/" + rfidKey);
-        rfidRef.remove()
+// Function to delete history log
+function deleteLogs(assesmentName, logKey) {
+    if (confirm("Are you sure you want to delete this item?")) {
+        const logRef = database.ref("ApplicantAssesmentForm/" + assesmentName + "/" + logKey);
+        logRef.remove()
             .then(() => {
-                console.log("Rfid deleted successfully!");
+                console.log("item deleted successfully!");
             })
             .catch((error) => {
-                console.error("Error deleting rfid:", error);
+                console.error("Error deleting item:", error);
             });
     }
 }
+
+// Call the function when the page loads
+document.addEventListener("DOMContentLoaded", loadView);
+
 
 // Function to filter the table based on search input
 function filterTable() {
@@ -112,16 +112,18 @@ function filterTable() {
     let rows = table.getElementsByTagName("tr");
 
     for (let row of rows) {
-        let firstname = row.cells[1].textContent.toLowerCase();
+        let firstname = row.cells[0].textContent.toLowerCase();
         let lastname = row.cells[1].textContent.toLowerCase();
         let email = row.cells[2].textContent.toLowerCase();
-        let status = row.cells[3].textContent.toLowerCase();
+        let position = row.cells[3].textContent.toLowerCase();
+        let status = row.cells[5].textContent.toLowerCase();
 
         // Show row if any column matches the search input
         if (
             firstname.includes(input) || 
             lastname.includes(input) || 
             email.includes(input) || 
+            position.includes(input) || 
             status.includes(input)
         ) {
             row.style.display = ""; // Show row
@@ -204,67 +206,6 @@ function filterTable() {
   
   // Call the function to update the profile name in real-time
   updateProfileName();
-  loadRfid();
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("rfidRegistrationForm");
-
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent page reload
-
-        // Get input values from the form
-        const rfid = document.getElementById("rfID").value.trim();
-        const firstname = document.getElementById("first-name").value.trim();
-        const lastname = document.getElementById("last-name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        const attendanceStatus = document.getElementById("attendacnce-status").value.trim();
-        const timeIn = document.getElementById("time-in").value.trim();
-        const timeOut = document.getElementById("time-out").value.trim();
-        const date = document.getElementById("date").value.trim();
-        const rfidStatus = document.getElementById("rfid-status").value.trim();
-
-        if (rfid === "") {
-            alert("RFID field cannot be empty!");
-            return;
-        }
-
-        // Reference to the Firebase database path
-        const dbRef = firebase.database().ref("ScanTag/" + rfid);
-
-        // Check if RFID exists in Firebase
-        dbRef.once("value", (snapshot) => {
-            if (snapshot.exists()) {
-                // RFID found, update data
-                const updatedData = {
-                    firstname: firstname,
-                    lastname: lastname,
-                    email: email,
-                    attendance_status: attendanceStatus,
-                    time_in: timeIn,
-                    time_out: timeOut,
-                    date: date,
-                    rfid_status: rfidStatus
-                };
-
-                dbRef.update(updatedData)
-                    .then(() => {
-                        alert("RFID data updated successfully!");
-                        form.reset(); // Clear the form after submission
-                    })
-                    .catch((error) => {
-                        console.error("Error updating data: ", error);
-                        alert("Failed to update RFID data. Please try again.");
-                    });
-            } else {
-                // RFID not found
-                alert("Error: RFID not found in the database. Please check the ID.");
-            }
-        }).catch((error) => {
-            console.error("Error checking RFID existence:", error);
-            alert("Database error. Please try again.");
-        });
-    });
-});
 
 
   
