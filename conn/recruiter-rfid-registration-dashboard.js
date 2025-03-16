@@ -72,6 +72,8 @@ function loadRfid() {
                 <td>${rfid.time_out || ""}</td>
                 <td>${rfid.date || ""}</td>
                 <td>${rfid.rfid_status || ""}</td>
+                <td>${rfid.time_duration_from || ""}</td>
+                <td>${rfid.time_duration_to || ""}</td>
                 <td>
                     <button type="button" class="btn btn-success" onclick="viewHistory('${rfidKey}')">View</button>
                 </td>
@@ -217,9 +219,8 @@ function filterTable() {
         const firstname = document.getElementById("first-name").value.trim();
         const lastname = document.getElementById("last-name").value.trim();
         const email = document.getElementById("email").value.trim();
-        const attendanceStatus = document.getElementById("attendacnce-status").value.trim();
-        const timeIn = document.getElementById("time-in").value.trim();
-        const timeOut = document.getElementById("time-out").value.trim();
+        const timeDurationFrom = document.getElementById("time-duration-from").value.trim();
+        const timeDurationTo = document.getElementById("time-duration-to").value.trim();
         const date = document.getElementById("date").value.trim();
         const rfidStatus = document.getElementById("rfid-status").value.trim();
 
@@ -239,9 +240,8 @@ function filterTable() {
                     firstname: firstname,
                     lastname: lastname,
                     email: email,
-                    attendance_status: attendanceStatus,
-                    time_in: timeIn,
-                    time_out: timeOut,
+                    time_duration_from: timeDurationFrom,
+                    time_duration_to: timeDurationTo,
                     date: date,
                     rfid_status: rfidStatus
                 };
