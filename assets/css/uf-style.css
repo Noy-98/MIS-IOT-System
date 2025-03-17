@@ -136,7 +136,7 @@ a:hover{
   }
 
 /* Media query for width 300px or less */
-@media (max-width: 577px) {
+@media (max-width: 200px) {
     .uf-form-signin,
     .uf-form-signin * {
         display: none;
